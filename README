@@ -1,0 +1,112 @@
+Nazdravan Georgiana Alexandra - 324CB
+
+Am 11 clase si o interfata, ce ma ajuta la abstractizare.
+
+Interfata este Vehicul, ce imi "aduna" toate tipurile posibile de vehicule
+    si care este implementata de 4 clase. Am ales sa folosesc aceasta interfata,
+    deoarece mi s-a parut cel mai simplu mod de a putea da ca parametru in drive()
+    un vehicul la modul general in Graph, dar la modul particular in Main. Astfel,
+    in Main, in metoda check_vehicle(), verific daca am citit din fisier a, b, c
+    sau m. In functie de acestea, creez obiecte de tip Autoturism, Bicicleta,
+    Camion sau Motocicleta. Acest vehicul creat, il trimit ca parametru in drive().
+In metoda main() din clasa Main, ma ocup cam de tot ce inseamna citire din fisier. 
+    Bineinteles, ma folosesc de try si de catch, pentru cazul in care nu se gaseste
+    fisierul din care sa se citeasca. Am si doua variabile, nrMuchii si nrNoduri.
+    Cu ajutorul unui Scanner, citesc linie cu linie din fisier. Prima data, stiu
+    sigur ca pe prima linie se afla nr de noduri si nr de muchii, astfel ca in
+    prima faza citesc doar prima linie si in variabilele de mai sus, salvez aceste
+    doua valori. Imi initializez graful, adica harta orasului. Continui apoi sa 
+    citesc pana la finalul fisierului. Pe parcurs, insa, "impun" niste conditii. 
+    Daca primul caracter din linia citita este P, atunci inseamna ca este vorba 
+    de o strada si ca trebuie sa o adaug in harta orasului prin apelarea metodei
+    addStreet(). Daca nu este P primul caracter, atunci ori trebuie sa adaug un
+    ambuteiaj, ori trebuie sa afisez un drum. Daca este vorba de ambuteiaje
+    (adica de trafuc, blocaj sau accident), apelez metoda addRestriction(). Daca 
+    este vorba de drive, apelez metoda check_vehicle(), din care se apeleaza me-
+    toda drive().
+Am 3 clase aflate in oglinda (ca sa zic asa): Autoutilitar, Autovehicul si Moped,
+    ce sunt caracteristice mijloacelor de transport de gabarit mare, mediu si res-
+    pectiv mic. Aceste clase sunt mostenite in felul urmator:
+        ->Camion este singurul de gabarit mare, deci, extinde clasa Autoutilitar
+        (din care isi ia gabaritul) si implementeaza interfata Vehicul (care ii
+        "impune" sa contina metoda creeaza(), folosita alaturi de constructori, in 
+        Main).
+        ->Autoturismul este singurul de gabarit mediu, deci, extinde clasa Autove-
+        hicul(din care isi ia gabaritul) si implementeaza interfata Vehicul(care ii
+        "impune" sa contina metoda creeaza(), folosita alaturi de constructori, in 
+        Main).
+        ->Exista doua mijloace de transport de gabarit mic: 
+            *Bicicleta este una dintre ele, deci, extinde clasa Moped(din care isi
+            ia gabaritul) si implementeaza interfata Vehicul(care ii "impune" sa 
+            contina metoda creeaza(), folosita alaturi de constructori, in Main).
+            *Motocicleta este cea de-a doua. Extinde clasa Moped(din care isi
+            ia gabaritul) si implementeaza interfata Vehicul(care ii "impune" sa 
+            contina metoda creeaza(), folosita alaturi de constructori, in Main).
+    Fiecare dintre cele 4 clase au inca doua variabile de membru: key-ul specific
+        fiecareia(adica a, b, c sau m) si costul suplimentar pe care il are fiecare.
+    Am ales aici sa folosesc mostenire deoarece gabaritul tine de "tipul mare"
+        de vehicule; astfel, apeland super()) in clasa copil, am acces la acest gabarit.
+Nod este o clasa care contine o singura variabila de membru, numele unui nod din
+    graf. I-am implementat doar constructorul cu parametru(niciodata nu a fost nevoie
+    sa folosesc fara), getter si setter.
+Muchie este o clasa care contine 4 variabile de membru, ce sunt specifice fiecarei strazi:
+    -> unde se termina strada? (Nod end)
+    -> cat ma costa sa parcurg strada? (int cost)
+    -> care este limita de gabarit pentru mijloace de transport?(int gabarit)
+    -> am restrictii? daca da, cat ma costa? (int restrictie)
+    Nu se intampla prea multe in clasa aceasta, am constructori (si cu, si fara parametri),
+    getteri, setteri si o metoda addRestriction() care imi creste costul restrictiilor de pe
+    strada respectiva.
+Graph este clasa in care sunt implementate metodele cerute. Am patru variabile de membru:
+    -> muchie, care este un vector de liste (practic, toata harta orasului)
+    -> nrNoduri, in care imi salvez numarul de noduri din graf
+    -> limitaG, care reprezinta gabaritul unui vehicul
+    -> cost, care reprezinta costul unui vehicul
+    Ultimele se actualieaza de fiecare data cand apelez metoda drive
+    Primele doua raman neschimbate pentru o harta data.
+    Urmeaza constructorii, getterii si setteri. Constructorul cu parametri este altfel fata
+        de cum ar fi trebuit sa fie in acest caz. L-am implementat astfel incat sa-mi aloce
+        cate o lista pentru fiecare element al vectorului.
+    In metoda addStreet(), adaug cate o noua strada, si folosesc bubbleSort(). Nu era necesar, insa
+        mi-am dorit ca listele sa fie ordonate crescator dupa numele nodului. 
+    In addRestriction(), caut in harta mai intai nodul de start, apoi nodul de end si adaug in campul
+        de restrictie dintr-o muchie valoarea citita din fisier.
+    minDistance() este o metoda ajutatoare pentru Dijkstra. Aici, caut in vectorul de costuri minime
+        si intorc indexul la care se afla acest cost minim.
+    Prin cele doua metode getObj(), am creat Compile time Polymorphism. De ce am folosit acest tip
+        de polimorfism? Mi se pare ca devine codul mai curat si mai usor de citit. Pe prima, la care 
+        am un singur parametru, si acela este vehiculul, o apelez la inceputul metodei drive() pentru 
+        a afla cu ce vehicul am mai exact de a face, folosindu-ma de getClass(). Aici, imi setez 
+        valori pentru limitaG si cost. A doua metoda, cea care primeste doua int-uri ca parametri, 
+        cauta sa vada daca exista vreo strada care sa inceapa cu src si sa se termine cu dest. Daca nu
+        exista, returneaza null. 
+    Metoda scrie() este folosita ca sa scriu in fisier drumul parcurs si costul drumului. In vectorul
+        de costuri, exista o legatura intre indici si valoarea de la indicii respectivi. M-am folosit
+        de aceasta legatura in scrie(). Am un vector si o lista. Vectorul afisare ar fi continut 0-uri
+        in afara de drumurile pe care ar fi trebuit sa le afisez, astfel ca am preferat sa-l umplu
+        cu X-uri, si sa-i schimb valoarea lui X acolo unde era cazul. In lista, am salvat toate 
+        elementele diferite de X si aceasta lista am scris-o in fisier.
+    In drive(), adica acolo unde implementez Dijkstra, am un vector b boolean, care este fals la inceput.
+        El va deveni true in momentul in care un nod e vizitat. Mai este un vector dist, de costuri mi-
+        nime, care este "umplut" cu 2147483647, adica cea mai mare valoare pe care poate un int sa o ia,
+        si un vector parent, in care imi salvez drumul. In primul for, se decide cea mai mica distanta
+        posibila din tot vectorul de noduri. u este egal cu src la prima iteratie. Daca u este -1, adica
+        nu s-a gasit, dau continue pentru a trece la nodul urmator. Nodul cu indexul u este vizitat, deci
+        ii setez valoarea true in b. Al doilea for se cauta distanta minima a nodurilor adiacente a nodului
+        in discutie u. Aici, trebuie respectate niste conditii. In primul rand, caut sa vad daca exista 
+        strada care sa inceapa cu u si sa se termine cu j. Daca gasesc, verific daca nu este depasita limita
+        de gabarit. Daca gabaritul este respectat, atunci, in aux, salvez costul total al drumului dupa 
+        formula din enuntul temei. In ultimul if, verific daca:
+            -> nodul u este nevizitat
+            -> costul lui u este diferit de 2147483647
+            -> daca ajung in j prin u e mai putin costisitor decat actualul cost al drumului(dist[j])?
+        Daca toate conditiile sunt respectate, atunci dist[j] isi schimba valoarea, si salvez in vectorul de
+        drum, parent, pe pozitia j valoarea lui u(de aici se creeaza legatura de care m-am folosit in scrie()).
+        La final, doar apelez scrie() pentru a scrie in "map.out".
+
+(Pe vmchecker imi apare warning din cauza vectorului de liste creat, insa acest lucru nu afecteaza functionalitatea
+    programului. Am preferat sa creez un vector de liste in loc sa creez o lista de liste, deoarece in al doilea caz,
+    ar fi fost nevoie de foarte multe cast-uri, pe care, astfel, le-am evitat).
+
+
+
